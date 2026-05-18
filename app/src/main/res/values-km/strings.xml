@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Ready App Clone</string>
+
+    <!-- Login Screen -->
+    <string name="welcome_title">សូមស្វាគមន៍មកកាន់ប្រព័ន្ធជួរ</string>
+    <string name="login_subtitle">ចូលគណនីពពករបស់អ្នក</string>
+    <string name="hint_username">ឈ្មោះអ្នកប្រើ</string>
+    <string name="hint_password">ពាក្យសម្ងាត់</string>
+    <string name="btn_login">ចូល</string>
+    <string name="powered_by">ដំណើរការដោយ</string>
+
+    <!-- Terminal Screen -->
+    <string name="select_company_title">ជ្រើសរើសក្រុមហ៊ុនរបស់អ្នក</string>
+    <string name="select_company_subtitle">សូមជ្រើសរើសក្រុមហ៊ុនរបស់អ្នក</string>
+    <string name="hint_select_company">ជ្រើសរើសក្រុមហ៊ុន</string>
+    <string name="hint_select_terminal">ជ្រើសរើសស្ថានីយ</string>
+    <string name="btn_connect">ភ្ជាប់ទៅស្ថានីយរបស់អ្នក</string>
+
+    <!-- Home Screen -->
+    <string name="store_location">ទីតាំងហាង</string>
+    <string name="tab_all">ទាំងអស់</string>
+    <string name="tab_pickup">យកទៅ</string>
+    <string name="tab_walkin">ចូលមក</string>
+    <string name="tab_delivery">ដឹកជញ្ជូន</string>
+    <string name="tab_takeaway">យកចេញ</string>
+    <string name="status_ready">រួចរាល់</string>
+    <string name="status_recall">ហៅម្តងទៀត</string>
+
+    <!-- Setting Screen -->
+    <string name="setting_title">ការកំណត់</string>
+    <string name="languages">ភាសា</string>
+    <string name="log_out">ចាកចេញ</string>
+
+    <!-- Select Language Screen -->
+    <string name="select_language_title">ជ្រើសរើសភាសា</string>
+    <string name="lang_english">English</string>
+    <string name="lang_khmer">ខ្មែរ</string>
+    <string name="lang_khmer_sub">Khmer</string>
+    <string name="lang_chinese">中文</string>
+    <string name="lang_chinese_sub">Chinese</string>
+</resources>

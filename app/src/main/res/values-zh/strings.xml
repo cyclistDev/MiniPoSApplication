@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Ready App Clone</string>
+
+    <!-- Login Screen -->
+    <string name="welcome_title">欢迎使用队列系统</string>
+    <string name="login_subtitle">登录您的云账户</string>
+    <string name="hint_username">用户名</string>
+    <string name="hint_password">密码</string>
+    <string name="btn_login">登录</string>
+    <string name="powered_by">技术支持</string>
+
+    <!-- Terminal Screen -->
+    <string name="select_company_title">选择您的公司</string>
+    <string name="select_company_subtitle">请选择您的公司</string>
+    <string name="hint_select_company">选择公司</string>
+    <string name="hint_select_terminal">选择终端</string>
+    <string name="btn_connect">连接到您的终端</string>
+
+    <!-- Home Screen -->
+    <string name="store_location">门店位置</string>
+    <string name="tab_all">全部</string>
+    <string name="tab_pickup">取餐</string>
+    <string name="tab_walkin">堂食</string>
+    <string name="tab_delivery">外卖</string>
+    <string name="tab_takeaway">打包</string>
+    <string name="status_ready">就绪</string>
+    <string name="status_recall">重新呼叫</string>
+
+    <!-- Setting Screen -->
+    <string name="setting_title">设置</string>
+    <string name="languages">语言</string>
+    <string name="log_out">退出登录</string>
+
+    <!-- Select Language Screen -->
+    <string name="select_language_title">选择语言</string>
+    <string name="lang_english">English</string>
+    <string name="lang_khmer">ខ្មែរ</string>
+    <string name="lang_khmer_sub">Khmer</string>
+    <string name="lang_chinese">中文</string>
+    <string name="lang_chinese_sub">Chinese</string>
+</resources>

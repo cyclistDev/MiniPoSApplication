@@ -1,6 +1,21 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(FileInputStream(localPropertiesFile))
+    }
+}
+
+val mqttUrl = localProperties.getProperty("mqtt.url") ?: "\"\""
+val mqttPort = localProperties.getProperty("mqtt.port") ?: "0"
+val mqttUsername = localProperties.getProperty("mqtt.username") ?: "\"\""
+val mqttPassword = localProperties.getProperty("mqtt.password") ?: "\"\""
 
 android {
     namespace = "com.monakom.readyappclone"
@@ -25,11 +40,10 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //MQTT credential
-
-        buildConfigField("String", "MQTT_URL", "\"202.62.57.237\"")
-        buildConfigField("int", "MQTT_PORT", "41883")
-        buildConfigField("String", "MQTT_USERNAME", "\"admin\"")
-        buildConfigField("String", "MQTT_PASSWORD", "\"admin\"")
+        buildConfigField("String", "MQTT_URL", mqttUrl)
+        buildConfigField("int", "MQTT_PORT", mqttPort)
+        buildConfigField("String", "MQTT_USERNAME", mqttUsername)
+        buildConfigField("String", "MQTT_PASSWORD", mqttPassword)
     }
 
     packaging {

@@ -11,12 +11,12 @@ import java.nio.charset.StandardCharsets
 
 object MqttManager {
 
-    private const val TAG = "MqttManager"
+    private val TAG = "MqttManager"
 
-    private const val HOST = BuildConfig.MQTT_URL
-    private const val PORT = BuildConfig.MQTT_PORT
-    private const val USERNAME = BuildConfig.MQTT_USERNAME
-    private const val PASSWORD = BuildConfig.MQTT_PASSWORD
+    private val HOST = BuildConfig.MQTT_URL
+    private val PORT = BuildConfig.MQTT_PORT
+    private val USERNAME = BuildConfig.MQTT_USERNAME
+    private val PASSWORD = BuildConfig.MQTT_PASSWORD
 
     private var client: Mqtt5AsyncClient? = null
 

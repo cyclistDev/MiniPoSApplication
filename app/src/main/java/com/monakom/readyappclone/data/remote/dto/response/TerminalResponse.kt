@@ -1,4 +1,4 @@
-package com.monakom.readyappclone.data.model.response
+package com.monakom.readyappclone.data.remote.dto.response
 
 import com.google.gson.annotations.SerializedName
 

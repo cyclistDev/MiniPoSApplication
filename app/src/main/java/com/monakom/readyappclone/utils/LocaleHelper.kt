@@ -1,35 +1,35 @@
 package com.monakom.readyappclone.utils
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
+import com.monakom.readyappclone.utils.constants.AppConstants
 import java.util.Locale
+import androidx.core.content.edit
 
 object LocaleHelper {
-    private const val PREF_NAME = "app_prefs"
-    private const val KEY_LANGUAGE = "language"
 
-    //Should call in every activities
     fun onAttach(context: Context): Context {
         val language = getSavedLanguage(context)
         return setLocale(context, language)
     }
 
-    //Saved and Apply new language
     fun setLocale(context: Context, language: String): Context {
         saveLanguage(context, language)
         return updateResources(context, language)
     }
 
     fun getSavedLanguage(context: Context): String {
-        val prefs: SharedPreferences =
-            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_LANGUAGE, "en") ?: "en"
+        val prefs = context.getSharedPreferences(
+            AppConstants.PREF_LOCALE, Context.MODE_PRIVATE
+        )
+        return prefs.getString(AppConstants.KEY_LANGUAGE, AppConstants.LANG_EN) ?: AppConstants.LANG_EN
     }
 
     private fun saveLanguage(context: Context, language: String) {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putString(KEY_LANGUAGE, language).apply()
+        val prefs = context.getSharedPreferences(
+            AppConstants.PREF_LOCALE, Context.MODE_PRIVATE
+        )
+        prefs.edit { putString(AppConstants.KEY_LANGUAGE, language) }
     }
 
     private fun updateResources(context: Context, language: String): Context {
@@ -40,5 +40,4 @@ object LocaleHelper {
         config.setLayoutDirection(locale)
         return context.createConfigurationContext(config)
     }
-
 }

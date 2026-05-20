@@ -3,12 +3,13 @@ package com.monakom.readyappclone.ui.setting
 import android.content.Intent
 import android.os.Bundle
 import com.monakom.readyappclone.base.BaseActivity
-import com.monakom.readyappclone.data.SessionManager
+import com.monakom.readyappclone.data.local.pref.SessionManager
 import com.monakom.readyappclone.databinding.ActivitySettingBinding
 import com.monakom.readyappclone.ui.language.SelectLanguageActivity
-import com.monakom.readyappclone.ui.login.MainActivity
+import com.monakom.readyappclone.MainApplication
 import com.monakom.readyappclone.utils.LocaleHelper
 import com.monakom.readyappclone.data.mqtt.MqttManager
+import kotlin.jvm.java
 
 class SettingActivity : BaseActivity() {
 
@@ -35,7 +36,7 @@ class SettingActivity : BaseActivity() {
         binding.tvLogOut.setOnClickListener {
             MqttManager.disconnect()
             SessionManager.clearSession(this)
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, MainApplication::class.java))
             finishAffinity() // clears all back stack → fresh login
         }
     }

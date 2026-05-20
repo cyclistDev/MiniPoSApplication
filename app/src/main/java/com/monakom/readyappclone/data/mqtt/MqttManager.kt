@@ -2,49 +2,71 @@ package com.monakom.readyappclone.data.mqtt
 
 import android.util.Log
 import com.monakom.readyappclone.BuildConfig
-import com.hivemq.client.mqtt.MqttClient
-import com.hivemq.client.mqtt.datatypes.MqttQos
-import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient
-import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
-import java.nio.ByteBuffer
-import java.nio.charset.StandardCharsets
+import com.monakom.readyappclone.utils.constants.AppConstants
+import org.eclipse.paho.mqttv5.client.IMqttToken
+import org.eclipse.paho.mqttv5.client.MqttAsyncClient
+import org.eclipse.paho.mqttv5.client.MqttCallback
+import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse
+import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence
+import org.eclipse.paho.mqttv5.common.MqttException
+import org.eclipse.paho.mqttv5.common.MqttMessage
+import org.eclipse.paho.mqttv5.common.packet.MqttProperties
 
 object MqttManager {
 
-    private val TAG = "MqttManager"
+    private const val TAG = "MqttManager"
 
-    private val HOST = BuildConfig.MQTT_URL
-    private val PORT = BuildConfig.MQTT_PORT
-    private val USERNAME = BuildConfig.MQTT_USERNAME
-    private val PASSWORD = BuildConfig.MQTT_PASSWORD
+    private val BROKER_URL = "tcp://${BuildConfig.MQTT_URL}:${BuildConfig.MQTT_PORT}"
+    private val USERNAME   = BuildConfig.MQTT_USERNAME
+    private val PASSWORD   = BuildConfig.MQTT_PASSWORD
 
-    private var client: Mqtt5AsyncClient? = null
+    private var mqttClient: MqttAsyncClient? = null
 
     var onMessageReceived: ((String) -> Unit)? = null
 
-    fun connect(terminalId: String) {
-
+    fun connectMqtt(terminalId: String) {
         try {
-            client = MqttClient.builder()
-                .useMqttVersion5()
-                .serverHost(HOST)
-                .serverPort(PORT)
-                .buildAsync()
+            val clientId = "ReadyApp_${System.currentTimeMillis()}"
+            mqttClient = MqttAsyncClient(BROKER_URL, clientId, MemoryPersistence())
 
-            client?.connectWith()
-                ?.simpleAuth()
-                ?.username(USERNAME)
-                ?.password(ByteBuffer.wrap(PASSWORD.toByteArray()))
-                ?.applySimpleAuth()
-                ?.send()
-                ?.whenComplete { _, throwable ->
-                    if (throwable != null) {
-                        Log.e(TAG, "Connection failed: ${throwable.message}")
-                    } else {
-                        Log.d(TAG, "Connected to MQTT broker!")
-                        subscribe(terminalId)
-                    }
+            val options = org.eclipse.paho.mqttv5.client.MqttConnectionOptions().apply {
+                userName = USERNAME
+                password = PASSWORD.toByteArray()
+                isCleanStart = true
+                connectionTimeout = 30
+                keepAliveInterval = 60
+            }
+
+            mqttClient?.setCallback(object : MqttCallback {
+                override fun disconnected(disconnectResponse: MqttDisconnectResponse?) {
+                    Log.e(TAG, "Disconnected: ${disconnectResponse?.exception?.message}")
+                    // Auto reconnect
+                    Thread.sleep(5000)
+                    connectMqtt(terminalId)
                 }
+
+                override fun mqttErrorOccurred(exception: MqttException?) {
+                    Log.e(TAG, "Error: ${exception?.message}")
+                }
+
+                override fun messageArrived(topic: String?, message: MqttMessage?) {
+                    val payload = message?.payload?.toString(Charsets.UTF_8) ?: return
+                    Log.d(TAG, "Message received on $topic: $payload")
+                    onMessageReceived?.invoke(payload)
+                }
+
+                override fun deliveryComplete(token: IMqttToken?) {}
+
+                override fun connectComplete(reconnect: Boolean, serverURI: String?) {
+                    Log.d(TAG, "Connected to MQTT broker! ✅")
+                    subscribe(terminalId)
+                }
+
+                override fun authPacketArrived(reasonCode: Int, properties: MqttProperties?) {}
+            })
+
+            mqttClient?.connect(options)
+            Log.d(TAG, "Connecting to MQTT broker...")
 
         } catch (e: Exception) {
             Log.e(TAG, "MQTT error: ${e.message}")
@@ -52,35 +74,24 @@ object MqttManager {
     }
 
     private fun subscribe(terminalId: String) {
+        val topic = "${AppConstants.MQTT_TOPIC_PREFIX}$terminalId"
+        Log.d(TAG, "Subscribing to: $topic")
 
-        val topic = "TicketService_uat_TicketReadyBroadcast_$terminalId"
-
-        Log.d(TAG, "SUBSCRIBING TO: $topic")
-
-        client?.subscribeWith()
-            ?.topicFilter(topic)
-            ?.qos(MqttQos.AT_LEAST_ONCE)
-            ?.callback { publish: Mqtt5Publish ->
-                val message = StandardCharsets.UTF_8
-                    .decode(publish.payload.get())
-                    .toString()
-
-                Log.d(TAG, "Message received: $message")
-                onMessageReceived?.invoke(message)
-            }
-            ?.send()
-            ?.whenComplete { _, throwable ->
-                if (throwable != null) {
-                    Log.e(TAG, "Subscribe failed: ${throwable.message}")
-                } else {
-                    Log.d(TAG, "Subscribed to: $topic")
-                }
-            }
+        try {
+            mqttClient?.subscribe(topic, 1)
+            Log.d(TAG, "Subscribed to: $topic ✅")
+        } catch (e: Exception) {
+            Log.e(TAG, "Subscribe failed: ${e.message}")
+        }
     }
 
     fun disconnect() {
-        client?.disconnect()
-        client = null
-        Log.d(TAG, "Disconnected from MQTT")
+        try {
+            mqttClient?.disconnect()
+            mqttClient = null
+            Log.d(TAG, "Disconnected!")
+        } catch (e: Exception) {
+            Log.e(TAG, "Disconnect error: ${e.message}")
+        }
     }
 }

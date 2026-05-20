@@ -83,5 +83,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.hivemq:hivemq-mqtt-client:1.3.3")
+    implementation("org.eclipse.paho:org.eclipse.paho.mqttv5.client:1.2.5")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
 }

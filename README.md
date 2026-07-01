@@ -73,16 +73,16 @@ com.monakom.readyappclone/
 
 ### Auth
 ```
-POST 216/erp_cloud//adm/v1/api/oauth2          ← Login
-GET  216/erp_cloud//adm/v1/api/user/info        ← Get user info
-GET  216/erp_cloud//adm/v1/api/user/user-company/{userId}          ← Get companies
-GET  216/erp_cloud//adm/v1/api/user/user-td-terminal/{userId}      ← Get terminals
+POST example//adm/v1/api/oauth2          ← Login
+GET  example//adm/v1/api/user/info        ← Get user info
+GET  example//adm/v1/api/user/user-company/{userId}          ← Get companies
+GET  example//adm/v1/api/user/user-td-terminal/{userId}      ← Get terminals
 ```
 
 ### Tickets
 ```
-GET gateway/adm/v1/api/queue_display/tickets/order-type  ← Get tab types
-GET gateway/adm/v1/api/queue_display/tickets/list        ← Get ticket list
+GET example/api/queue_display/tickets/order-type  ← Get tab types
+GET example/api/queue_display/tickets/list        ← Get ticket list
 ```
 
 ---
